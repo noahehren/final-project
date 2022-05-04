@@ -38,7 +38,7 @@ st.markdown('''
 ''', unsafe_allow_html=True)
 
 st.header("Predicting Diabetes based on Risk Factors")
-
+st.sidebar.header("Diabetes Model")
 page_selected = st.sidebar.radio("Menu", ["Home", "Model", "About"])
 
 if page_selected == 'Home':
