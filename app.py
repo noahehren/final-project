@@ -38,7 +38,8 @@ st.markdown('''
 ''', unsafe_allow_html=True)
 
 st.header("Predicting Diabetes based on Risk Factors")
-st.sidebar.header("Diabetes Model")
+st.sidebar.header("MLExperts")
+st.sidebar.markdown('Analytics done right!')
 st.sidebar.image('diabetes.png')
 page_selected = st.sidebar.radio("Menu", ["Home", "Model", "About"])
 
