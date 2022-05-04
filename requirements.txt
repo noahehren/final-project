@@ -10,7 +10,7 @@ streamlit
 xgboost
 google-cloud-firestore
 google-cloud-storage
-pickle
+#pickle
 operator
 re
 turtle
