@@ -41,7 +41,7 @@ st.header("Predicting Diabetes based on Risk Factors")
 st.sidebar.header("MLExperts")
 st.sidebar.markdown('Analytics done right!')
 st.sidebar.image('diabetes.png')
-page_selected = st.sidebar.radio("**Menu**", ["Home", "Model", "About"])
+page_selected = st.sidebar.radio("Menu", ["Home", "Model", "About"])
 
 if page_selected == 'Home':
 
