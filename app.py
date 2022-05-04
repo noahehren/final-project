@@ -261,10 +261,10 @@ elif page_selected == 'Model':
         width = 0.3,
         color = ('#00008b', '#666666')
         )
-    ax.set_ylabel('Number of Occurences', fontsize = 5)
-    ax.set_xlabel(Variable, fontsize = 5)
-    plt.xticks(fontsize = 5) 
-    plt.yticks(fontsize = 5)
+    ax.set_ylabel('Number of Occurences', fontsize = 7)
+    ax.set_xlabel(Variable, fontsize = 7)
+    plt.xticks(fontsize = 7) 
+    plt.yticks(fontsize = 7)
     #ax.bar_label(df[Variable].astype(int).value_counts()) ask yatish about data labels
     st.pyplot(fig)#.figure)
     
