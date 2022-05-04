@@ -39,6 +39,7 @@ st.markdown('''
 
 st.header("Predicting Diabetes based on Risk Factors")
 st.sidebar.header("Diabetes Model")
+st.image('diabetes.png')
 page_selected = st.sidebar.radio("Menu", ["Home", "Model", "About"])
 
 if page_selected == 'Home':
