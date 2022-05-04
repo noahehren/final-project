@@ -4,7 +4,8 @@ numpy
 pandas
 plotly
 protobuf
-scikit_le
+#scikit_le
+sklearn
 streamlit
 xgboost
 google-cloud-firestore
