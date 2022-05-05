@@ -153,14 +153,8 @@ elif page_selected == 'Model':
         st.set_option('deprecation.showPyplotGlobalUse', False)
 
         if 'Confusion Matrix' in metrics_list:
-            st.subheader("Confusion Matrix")
-            
-            labels = { 
-            0: "No Diabetes",
-            1: "Diabetes",
-            }       
-
-            plot_confusion_matrix(model, X_test, y_test, labels = [labels.get(0), labels.get(1)] )
+            st.subheader("Confusion Matrix")  
+            plot_confusion_matrix(model, X_test, y_test, classes = ["No Diabetes", "Diabetes"] )
             st.pyplot()
 
         if 'ROC Curve' in metrics_list:
