@@ -572,7 +572,7 @@ elif page_selected == 'Model':
         'Income':Income
         }, index = [0])
 
-    pipeline_file = "pipe_lightgbm.pkl"
+    pipeline_file = "pipe.pkl"
     def predict_diabetes(data):
         df = data
         pipeline = pickle.load(open(pipeline_file,'rb'))
