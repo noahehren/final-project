@@ -140,7 +140,7 @@ elif page_selected == 'Model':
     st.markdown('Choose a classifier and the plot(s) you want to see. After making your selection, press \'Run Model\'. The results will be printed below.')
     st.markdown('Please note that a \'0\' represents **no diabetes** and a \'1\' represents **prediabetes/diabetes**.')
 
-    @st.cache(persist = True. suppress_st_warning = True)
+    @st.cache(persist = True, suppress_st_warning = True)
     def split(df2):
         X = df2.drop(columns = ['Diabetes_binary'])
         X = pd.get_dummies(X, columns=['BMI', 'GenHlth', 'PhysHlth', 'Age', 'Education', 'Income'],drop_first=True)
