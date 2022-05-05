@@ -141,7 +141,7 @@ elif page_selected == 'Model':
     st.markdown('Please note that a \'0\' represents **no diabetes** and a \'1\' represents **prediabetes/diabetes**.')
 
     #@st.cache(persist = True)
-    @st.experimental_memo
+    @st.experimental_memo(suppress_st_warning = True)
     def split(df2):
         X = df2.drop(columns = ['Diabetes_binary'])
         X = pd.get_dummies(X, columns=['BMI', 'GenHlth', 'PhysHlth', 'Age', 'Education', 'Income'],drop_first=True)
@@ -149,7 +149,7 @@ elif page_selected == 'Model':
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=0)
         return X_train, X_test, y_train, y_test
     
-    @st.experimental_memo
+    @st.experimental_memo(suppress_st_warning = True)
     def plot_metrics(metrics_list):
         st.set_option('deprecation.showPyplotGlobalUse', False)
 
