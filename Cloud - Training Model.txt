@@ -1,0 +1,45 @@
+import numpy as np
+import pandas as pd
+from sklearn import metrics
+from sklearn.metrics import confusion_matrix, accuracy_score
+from sklearn.model_selection import cross_val_score, train_test_split
+import lightgbm as lgbm
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import OneHotEncoder
+from sklearn.compose import ColumnTransformer
+import pickle
+from google.cloud import storage
+import tempfile
+
+storage_client = storage.Client()
+
+def hello_world(request):
+  df_train = pd.read_csv('gs://appliedml-final-project-team7/diabetes_train.csv')
+  X = df_train.drop(columns=['Diabetes_binary'])
+  y = df_train['Diabetes_binary']
+  X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3)
+  column_transformer = ColumnTransformer([
+    ('cat', OneHotEncoder(handle_unknown='ignore'), ['BMI', 'GenHlth', 'PhysHlth', 'Age', 'Education', 'Income'])
+  ])
+  pipeline = Pipeline([
+    ('ct', column_transformer),
+    ('xgCLF', lgbm.LGBMClassifier(max_depth = 9, num_leaves = 21))
+  ])
+
+  train_X_pipe = pipeline.fit(X_train, y_train) 
+  scores = cross_val_score(train_X_pipe, X_train, y_train, scoring= 'accuracy', cv = 5)
+  cross_val_accuracy = np.mean(scores)
+  print('cross_val_accuracy', cross_val_accuracy)
+
+  pipe_file = tempfile.gettempdir() + '/pipeline.pkl' 
+  pickle.dump(pipeline, open(pipe_file, 'wb'))
+
+  bucket = storage_client.bucket("appliedml-final-project-team7")
+  blob = bucket.blob('pipeline.pkl')
+  blob.upload_from_filename(pipe_file)
+
+  y_predict = pipeline.predict(X_test)
+  test_accuracy = metrics.accuracy_score(y_test, y_predict)
+  print('test_accuracy', test_accuracy)
+
+  return ''

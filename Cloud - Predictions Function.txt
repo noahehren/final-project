@@ -1,0 +1,14 @@
+from google.cloud import storage
+import pickle
+import tempfile
+
+storage_client = storage.Client()
+
+def predict_diabetes(data):
+  bucket = storage_client.bucket('appliedml-final-project-team7')
+  blob = bucket.blob('pipeline.pkl')
+  pipe_file = tempfile.gettempdir() + '/pipeline.pkl'
+  blob.download_to_filename(pipe_file)
+  pipe = pickle.load(open(pipe_file,'rb'))
+  predictions = pipe.predict(data)
+  return predictions

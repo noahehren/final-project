@@ -1,0 +1,51 @@
+from predict import predict_diabetes
+from google.cloud import firestore
+import pandas as pd
+
+db = firestore.Client()
+
+def hello_world(request):
+  test_data = pd.read_csv('gs://appliedml-final-project-team7/diabetes_test.csv')
+  tdata = test_data.sample(1000)
+  ids = tdata.id.tolist() #adding id's to list so they can be added back later
+  tdata.drop(columns =['id'], inplace = True)
+  predictions = predict_diabetes(tdata)
+
+  col1 = db.collection('diabetes')
+
+  i = 0
+  for index, r in tdata.iterrows(): 
+    row = {
+      'id': ids[i],
+      'HighBP': r['HighBP'],
+      'HighChol': r['HighChol'],
+      'CholCheck': r['CholCheck'],
+      'BMI': r['BMI'],
+      'Smoker': r['Smoker'],
+      'HeartDiseaseorAttack': r['HeartDiseaseorAttack'],
+      'PhysActivity': r['PhysActivity'],
+      'Fruits': r['Fruits'],
+      'Veggies': r['Veggies'],
+      'HvyAlcoholConsump': r['HvyAlcoholConsump'],
+      'AnyHealthcare': r['AnyHealthcare'],
+      'NoDocbcCost': r['NoDocbcCost'],
+      'GenHlth': r['GenHlth'],
+      'MentHlth': r['MentHlth'],
+      'PhysHlth': r['PhysHlth'],
+      'DiffWalk': r['DiffWalk'],
+      'Sex': r['Sex'],
+      'Age': r['Age'],
+      'Education': r['Education'],
+      'Income': r['Income'],
+      'Diabetes_Predictions': predictions[i]
+    }
+
+    i += 1
+    doc_ref = col1.document(str(row['id']))
+    doc = doc_ref.get()
+    if doc.exists:
+      doc_ref.update(row)
+    else:
+      doc_ref.set(row)
+  
+  return ''

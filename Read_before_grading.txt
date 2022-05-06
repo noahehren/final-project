@@ -1,0 +1,1 @@
+Lines 139 to 245 work a lot faster when everything is stored locally. However, when running off the cloud, these take forever to run. If you need us to demonstrate all five classifiers working on a local storage, please reach out for a quick demo.

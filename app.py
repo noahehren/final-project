@@ -1,6 +1,3 @@
-#from operator import index
-#from re import S
-#from turtle import color
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -76,7 +73,6 @@ if page_selected == 'Home':
     with col1:
         Variable = st.sidebar.multiselect('Predictor Variable(s)', df.drop(columns = ['Diabetes_Predictions', 'BMI', 'PhysHlth']).columns.sort_values(), default = 'Age')
         print(Variable)
-        #df.loc[df[str(Variable)]]['Diabetes_Predictions'].value_counts() #ask yatish how we can index based on multiple variables
         for var in Variable:      
             fig, ax = plt.subplots(figsize = (6,2))      
             ax = pd.crosstab(df[var].astype(int), df['Diabetes_Predictions'].astype(int)).plot(
@@ -97,7 +93,7 @@ if page_selected == 'Home':
     
     st.subheader('Model Performance')
     df_sample = df.sample(5)
-    for index, row in df_sample.iterrows():
+    for index, row in df_sample.iterrows(): #attaching the sample data to the predictions in a way that data will appear in 'row' format rather than 'column' format
         col1, col2 = st.columns((2,3))
         with col1:
             if row['Diabetes_Predictions'] == 1:
@@ -140,15 +136,15 @@ elif page_selected == 'Model':
     st.markdown('Choose a classifier and the plot(s) you want to see. After making your selection, press \'Run Model\'. The results will be printed below.')
     st.markdown('Please note that a \'0\' represents **no diabetes** and a \'1\' represents **prediabetes/diabetes**.')
 
-    @st.cache(persist = True, suppress_st_warning = True)
-    def split(df2):
+    @st.cache(persist = True, suppress_st_warning = True) #Using st.cache to speed up functions; however, these functions have trouble running on the cloud; we suggest you only run the decision tree because it is in the only one that seems to load in a normal amount of time
+    def split(df2): #We create df2 below
         X = df2.drop(columns = ['Diabetes_binary'])
-        X = pd.get_dummies(X, columns=['BMI', 'GenHlth', 'PhysHlth', 'Age', 'Education', 'Income'],drop_first=True)
+        X = pd.get_dummies(X, columns=['BMI', 'GenHlth', 'PhysHlth', 'Age', 'Education', 'Income'],drop_first=True) # we couldn't get dummies with onehotencoder here, so we chose to do it with pandas. We assumed that onehotencoder drops first as well. We believe this was proved correct because the accuracy scores using the pickle file were identical.
         y = df2['Diabetes_binary']
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=0)
         return X_train, X_test, y_train, y_test
     
-    @st.cache(persist = True, suppress_st_warning = True)
+    @st.cache(persist = True, suppress_st_warning = True) #the suppress warning is here because streamlit doesn't like when you cache with any text elements like st.subheader
     def plot_metrics(metrics_list):
         st.set_option('deprecation.showPyplotGlobalUse', False)
 
@@ -165,7 +161,7 @@ elif page_selected == 'Model':
     df2 = pd.read_csv('diabetes_train.csv')
     X_train, X_test, y_train, y_test = split(df2)
 
-    st.sidebar.subheader("Test a Classifier")
+    st.sidebar.subheader("Test a Classifier") #all the test a classifier code is written without the pipeline pickle file because we need specific inputs to calculate the necessary scores
     classifier = st.sidebar.selectbox("What classifier do you want to test?", ("Decision Tree", "KNearestNeighbor", "LightGBM", "Random Forest", "XGBoost"))
 
     if classifier == 'Decision Tree':
@@ -268,8 +264,7 @@ elif page_selected == 'Model':
     ax.set_xlabel(Variable, fontsize = 7)
     plt.xticks(fontsize = 7) 
     plt.yticks(fontsize = 7)
-    #ax.bar_label(df[Variable].astype(int).value_counts()) ask yatish about data labels
-    st.pyplot(fig)#.figure)
+    st.pyplot(fig)
     
 #################################################################################################
 
@@ -278,7 +273,7 @@ elif page_selected == 'Model':
     st.markdown(' Simply select the values you want from the boxes below (additional variables in the \'Other Predictor Variables\' expander) and then press the **prediction button** in the sidebar.')
     col1, col2 = st.columns(2)
     with col1:
-        Sex_options = { 
+        Sex_options = { #all code that looks like this is being used to have labels appear as the text we want rather than binary variables; done using the format_func argument
         0: "Female",
         1: "Male",
         }       
